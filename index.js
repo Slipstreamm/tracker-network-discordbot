@@ -1,65 +1,35 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const fs = require('fs')
-const defaultprefix = '.'
+const defaultprefix = 't!'
 
 bot.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./cmd/').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
-    const command = require(`./cmd/${file}`);
+    const command = require(`./commands/${file}`);
 
     bot.commands.set(command.name, command);
 }
 
 bot.once('ready', () => {
     console.log('Bot is logged in. Date and time:', Date());
-    bot.user.setActivity(defaultprefix, {type: "LISTENING"});
+    bot.user.setActivity(defaultprefix, {
+        type: "LISTENING"
+    });
 })
 
 
 bot.on('message', message => {
-    if(message.channel.type == 'dm') return;
-    let prefixes = JSON.parse(fs.readFileSync('./data/prefixes.json', "utf8"));
-    if (!prefixes[message.guild.id]) {
-        prefixes[message.guild.id] = {
-            prefixes: defaultprefix
-        }
-    }
-    
-    let prefix = prefixes[message.guild.id].prefixes;
+    if (message.channel.type == "dm") return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = message.content.slice(defaultprefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
-    if (!message.content.startsWith(prefix) || message.author.bot || message.channel.type == 'dm') return;
+    if (!message.content.startsWith(defaultprefix) || message.author.bot) return;
 
-    if (command === 'ping') {
-        bot.commands.get('ping').execute(message, args);
-    } else if (command === 'ban') {
-        bot.commands.get('ban').execute(message, args);
-    } else if (command === 'kick') {
-        bot.commands.get('kick').execute(message, args);
-    } else if (command === 'coin') {
-        bot.commands.get('coin').execute(message, args)
-    } else if (command === 'dice') {
-        bot.commands.get('dice').execute(message, args)
-    } else if (command === 'pfp') {
-        bot.commands.get('pfp').execute(message, args)
-    } else if (command === 'mute') {
-        bot.commands.get('mute').execute(message, args)
-    } else if (command === 'unmute') {
-        bot.commands.get('unmute').execute(message, args)
-    } else if (command === 'prefix') {
-        bot.commands.get('prefix').execute(message, args)
-    } else if (command === 'warn') {
-        bot.commands.get('warn').execute(message, args)
-    }  else if (command === 'tban') {
-        bot.commands.get('tban').execute(message, args)
-    }  else if (command === 'tmute') {
-        bot.commands.get('tmute').execute(message, args)
-    }  else if (command === 'math') {
-        bot.commands.get('math').execute(message, args)
-    }   
+    if (command === 'apexstat') {
+        bot.commands.get('apexstat').execute(message, args);
+    }
 })
 
 
