@@ -8,8 +8,8 @@ module.exports = {
     name: 'apex',
     description: 'Shows stats for Apex Legends',
     async execute(message, args) {
-        if(!args[0]) return message.reply('This might sound crazy, but you actually need to add arguments for me to get stats...')
-        if(!args[1]) return message.reply('Unfortunately, I can\'t get the stats for every user on a platform.')
+        if(!args[0]) return message.reply('You need to add arguments lmao')
+        if(!args[1]) return message.reply('You gonna give me a username or nah')
         var botmsg = await message.reply('Retrieving data. Please wait...')
         const options = {
             url: 'https://public-api.tracker.gg/v2/apex/standard/profile/' + args[0] + '/' + args[1],
